@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MustDoIt.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,23 +9,31 @@ namespace MustDoIt.Controllers
 {
     public class HomeController : Controller
     {
+        //створення контексту даних
+        BookContext db = new BookContext();
         public ActionResult Index()
         {
+            //отримуємо з БД всі об'єкти Book
+            IEnumerable<Book> books = db.Books;
+            ViewBag.Books = books;
             return View();
         }
-
-        public ActionResult About()
+        //При кліку на "купить" приймає "Id" книги
+        [HttpGet]
+        public ActionResult Buy(int id)
         {
-            ViewBag.Message = "Your application description page.";
-
+            ViewBag.BookId = id;
             return View();
         }
-
-        public ActionResult Contact()
+        [HttpPost]
+        public string Buy(Purchase purchase)
         {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            purchase.Date = DateTime.Now;
+            db.Purchases.Add(purchase);
+            db.SaveChanges();
+            return "Thanks," + purchase.Person + "for buy!";
         }
+
+      
     }
 }
