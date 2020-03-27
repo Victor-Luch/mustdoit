@@ -1,4 +1,5 @@
 ﻿using MustDoIt.Models;
+using MustDoIt.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace MustDoIt.Controllers
             ViewBag.Books = books;
             return View();
         }
-        //При кліку на "купить" приймає "Id" книги
+        //Get метод явий передає вюшку
         [HttpGet]
         public ActionResult Buy(int id)
         {
@@ -33,7 +34,27 @@ namespace MustDoIt.Controllers
             db.SaveChanges();
             return "Thanks," + purchase.Person + "for buy!";
         }
+        [HttpGet]
+        public ActionResult GetBook()
+        {
+            return View();
+        }
+        [HttpPost]
+        public string PostBook()
+        {
+            string title = Request.Form["title"];
+            string author = Request.Form["author"];
+            return title + " " + author;
+        }
+        public ActionResult GetHtml()
+        {
+            return new HtmlResult("<h2>Привет мир!</h2>");
+        }
+        public ActionResult GetImage()
+        {
+            string path = "../Content/Images/Безымянный.png";
+            return new ImageResult(path);
+        }
 
-      
     }
 }
